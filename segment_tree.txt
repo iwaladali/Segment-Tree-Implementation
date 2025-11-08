@@ -1,0 +1,47 @@
+struct ST {
+  int sz;
+  vector<ll>arr;
+
+  void bulid(int n){
+    sz=1;
+    while(sz<n)sz*=2;
+    arr.assign(2*sz,0);
+  }
+  void set(int i,int v,int x,int l,int r){
+    
+    if(r-l==1){
+      arr[x]=v;
+      return;
+    }
+    //if(i>=r||i<l)
+   // return;
+    int mid=(l+r)/2;
+   if(i<mid)
+    set(i,v,x*2+1,l,mid);
+    else
+    set(i,v,x*2+2,mid,r);
+    arr[x]=arr[2*x+1]+arr[2*x+2];
+    //cout<<arr[x]<<endl;
+  }
+  void set(int i,int v){
+    set(i,v,0,0,sz);
+  }
+  ll sum(int l,int r,int x,int lx,int rx){
+   // cout<<x<<" "<<arr[x]<<" "<<lx<<" "<<rx<<endl;
+    if(rx<=l||lx>=r)
+    return 0LL;
+   
+    if(rx<=r&&lx>=l)
+    return arr[x];
+    int mid=(lx+rx)/2;
+    ll left_s= sum(l,r,x*2+1,lx,mid);
+    ll right_s= sum(l,r,x*2+2,mid,rx);
+    //cout<< right_s<<" "<<left_s<<endl;
+    return right_s+left_s;
+  }
+  ll sum(int l,int r){
+    ll res=sum(l,r,0,0,sz);
+    //cout<<"yy"<<endl;
+    return res;
+  }
+};
