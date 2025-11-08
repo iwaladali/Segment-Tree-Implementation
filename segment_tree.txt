@@ -1,7 +1,7 @@
 struct ST {
   int sz;
   vector<ll>arr;
-
+//initial size, is very important!!!
   void bulid(int n){
     sz=1;
     while(sz<n)sz*=2;
@@ -39,9 +39,11 @@ struct ST {
     //cout<< right_s<<" "<<left_s<<endl;
     return right_s+left_s;
   }
+// sum from l to r-1
   ll sum(int l,int r){
     ll res=sum(l,r,0,0,sz);
     //cout<<"yy"<<endl;
     return res;
   }
 };
+
