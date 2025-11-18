@@ -1,49 +1,66 @@
+
+struct item{
+  int n,m;
+};
+
 struct ST {
   int sz;
-  vector<ll>arr;
-//initial size, is very important!!!
+  vector<item>arr;
+  item Nature_item={INT_MAX,0};
+  item item_set;
+
+  item merge(item a,item b){
+    if(a.n<b.n) return a;
+    if(a.n>b.n) return b;
+    item x;
+    x.n=a.n;
+    x.m=b.m+a.m;
+    return x; 
+  }
   void bulid(int n){
     sz=1;
     while(sz<n)sz*=2;
-    arr.assign(2*sz,0);
+    arr.assign(2*sz,Nature_item);
   }
   void set(int i,int v,int x,int l,int r){
     
     if(r-l==1){
-      arr[x]=v;
+      arr[x]=item_set;
       return;
     }
-    //if(i>=r||i<l)
-   // return;
+    
     int mid=(l+r)/2;
    if(i<mid)
     set(i,v,x*2+1,l,mid);
     else
     set(i,v,x*2+2,mid,r);
-    arr[x]=arr[2*x+1]+arr[2*x+2];
-    //cout<<arr[x]<<endl;
+    
+    arr[x]=merge(arr[2*x+1],arr[2*x+2]);
+ 
   }
   void set(int i,int v){
+    item_set.n=v;
+    item_set.m=1;
     set(i,v,0,0,sz);
   }
-  ll sum(int l,int r,int x,int lx,int rx){
-   // cout<<x<<" "<<arr[x]<<" "<<lx<<" "<<rx<<endl;
+  item min_fnc(int l,int r,int x,int lx,int rx){
+    
+    
     if(rx<=l||lx>=r)
-    return 0LL;
-   
+    return Nature_item;
+    
     if(rx<=r&&lx>=l)
     return arr[x];
     int mid=(lx+rx)/2;
-    ll left_s= sum(l,r,x*2+1,lx,mid);
-    ll right_s= sum(l,r,x*2+2,mid,rx);
-    //cout<< right_s<<" "<<left_s<<endl;
-    return right_s+left_s;
+    item left_s= min_fnc(l,r,x*2+1,lx,mid);
+    item right_s= min_fnc(l,r,x*2+2,mid,rx);
+    
+    return merge(right_s,left_s);
+    
   }
-// sum from l to r-1
-  ll sum(int l,int r){
-    ll res=sum(l,r,0,0,sz);
-    //cout<<"yy"<<endl;
+   item min_fnc(int l,int r){
+  item res=min_fnc(l,r,0,0,sz);
+    
     return res;
   }
 };
-
